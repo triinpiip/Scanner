@@ -1,10 +1,12 @@
 const statusEl = document.getElementById('status');
 const resultEl = document.getElementById('result');
 const videoEl = document.getElementById('video');
+const startButton = document.getElementById('startButton');
 
 let products = [];
 let lastDetectedCode = null;
 let lastDetectionTime = 0;
+let scannerStarted = false;
 
 function setStatus(message) {
   statusEl.textContent = message;
@@ -78,10 +80,30 @@ function handleScan(code) {
 }
 
 function startScanner() {
+  if (scannerStarted) {
+    return;
+  }
+
+  if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    setStatus('This page must be opened over HTTPS (or localhost) for camera access.');
+    resultEl.innerHTML = '<p class="muted">Open the page from GitHub Pages or localhost, then try again.</p>';
+    return;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setStatus('This browser does not support camera access.');
+    resultEl.innerHTML = '<p class="muted">Please use a modern mobile browser such as Chrome or Safari.</p>';
+    return;
+  }
+
   if (typeof Quagga === 'undefined') {
     setStatus('The barcode library did not load.');
     return;
   }
+
+  scannerStarted = true;
+  startButton.disabled = true;
+  startButton.textContent = 'Camera starting…';
 
   Quagga.init(
     {
@@ -118,6 +140,8 @@ function startScanner() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadProducts();
-  startScanner();
+  startButton.addEventListener('click', async () => {
+    await loadProducts();
+    startScanner();
+  });
 });
