@@ -1,0 +1,20 @@
+[
+  {
+    "code": "SKU-1001",
+    "name": "Wireless Mouse",
+    "location": "Aisle 3 / Shelf 2",
+    "qty": 12
+  },
+  {
+    "code": "ABC12345",
+    "name": "USB-C Cable",
+    "location": "Aisle 1 / Shelf 5",
+    "qty": 8
+  },
+  {
+    "code": "CODE128EX",
+    "name": "Notebook",
+    "location": "Aisle 4 / Shelf 1",
+    "qty": 25
+  }
+]
